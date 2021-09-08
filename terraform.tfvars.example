@@ -1,0 +1,4 @@
+one_endpoint      = "https://opennebula.domain.local/RPC2"
+one_username      = "oneuser"
+one_password      = "oneusertoken"
+one_flow_endpoint = "http://opennebula.domain.local:2474/RPC2"
