@@ -28,18 +28,18 @@ data "opennebula_image" "debian11" {
 }
 
 data "template_file" "master_init" {
-  template = file("files/master.sh")
+  template = file("../files/master.sh")
   vars = {
-    private_key = file("files/id_ecdsa")
-    public_key = file("files/id_ecdsa.pub")
+    private_key = file("../files/id_ecdsa")
+    public_key = file("../files/id_ecdsa.pub")
   }
 }
 
 data "template_file" "node_init" {
-  template = file("files/node.sh")
+  template = file("../files/node.sh")
   vars = {
-    private_key = file("files/id_ecdsa")
-    public_key = file("files/id_ecdsa.pub")
+    private_key = file("../files/id_ecdsa")
+    public_key = file("../files/id_ecdsa.pub")
   }
 }
 
