@@ -20,10 +20,14 @@ packages:
   - vim
   - nano-
   - python3-pip
+  - jq
 
 write_files:
-- path: /root/kubespray_install.sh
+- path: /root/kubespray-install.sh
   content: |
+    # am i master?
+    grep -q kubenodes /var/run/cloud-init/instance-data.json || exit 0
+    
     # prepare ssh client
     echo StrictHostKeyChecking no >> /root/.ssh/config
     ln -s /etc/ssh/ssh_host_rsa_key /root/.ssh/id_rsa
@@ -35,8 +39,6 @@ write_files:
     cd $KUBESPRAY
     
     ### FROM KUBESPRAY
-    pip3 install -r requirements.txt
-    
     # Install dependencies from ``requirements.txt``
     sudo pip3 install -r requirements.txt
     
@@ -48,8 +50,8 @@ write_files:
     CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py $${IPS[@]}
     
     # Review and change parameters under ``inventory/mycluster/group_vars``
-    cat inventory/mycluster/group_vars/all/all.yml
-    cat inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+    #cat inventory/mycluster/group_vars/all/all.yml
+    #cat inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
     
     # Deploy Kubespray with Ansible Playbook - run the playbook as root
     # The option `--become` is required, as for example writing SSL keys in /etc/,
@@ -58,5 +60,5 @@ write_files:
     ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml
 
 runcmd:
-  - /bin/bash /root/kubespray_install.sh
+  - /bin/bash -x /root/kubespray-install.sh
 
