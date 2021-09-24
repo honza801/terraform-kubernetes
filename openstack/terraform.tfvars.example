@@ -3,3 +3,4 @@ os_application_credential_secret = "user_secret"
 os_auth_url = "http://myauthurl:5000/v2.0"
 os_region   = "RegionOne"
 user_keypair = "user_keypair_name"
+node_count = 3

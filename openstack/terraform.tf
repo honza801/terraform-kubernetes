@@ -4,6 +4,7 @@ variable "os_application_credential_secret" {}
 variable "os_auth_url" {}
 variable "os_region" {}
 variable "user_keypair" {}
+variable "node_count" {}
 
 # Configure the OpenStack Provider
 provider "openstack" {
@@ -59,7 +60,7 @@ resource "openstack_compute_instance_v2" "node" {
   flavor_id       = data.openstack_compute_flavor_v2.flavor.id
   security_groups = ["default"]
   key_pair        = "tf kubernetes keypair"
-  count           = 1
+  count           = var.node_count
   user_data       = data.template_cloudinit_config.config.rendered
   network {
     name = "group-project-network"
