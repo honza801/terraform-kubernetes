@@ -19,6 +19,7 @@ in openstack find relevant auth data here
 cd openstack/
 cp -iv terraform.tfvars.example terraform.tfvars
 # edit terraform.tfvars
+terraform init
 terraform apply
 ```
 
@@ -34,6 +35,7 @@ cd opennebula/
 ssh-keygen -t ecdsa -N "" -f ../files/id_ecdsa
 cp -iv terraform.tfvars.example terraform.tfvars
 # edit terraform.tfvars
+terraform init
 terraform apply
 ```
 
