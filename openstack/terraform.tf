@@ -54,11 +54,24 @@ data "template_cloudinit_config" "config" {
   }
 }
 
+resource "openstack_networking_secgroup_v2" "secgroup" {
+  name        = "sg kubernetes"
+  description = "terraform kubernetes security group"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.secgroup.id
+}
+
 resource "openstack_compute_instance_v2" "node" {
   name            = "kube-node"
   image_id        = data.openstack_images_image_v2.debian11.id
   flavor_id       = data.openstack_compute_flavor_v2.flavor.id
-  security_groups = ["default"]
+  security_groups = [ openstack_networking_secgroup_v2.secgroup.name ]
   key_pair        = "tf kubernetes keypair"
   count           = var.node_count
   user_data       = data.template_cloudinit_config.config.rendered
@@ -71,7 +84,7 @@ resource "openstack_compute_instance_v2" "master" {
   name            = "kube-master"
   image_id        = data.openstack_images_image_v2.debian11.id
   flavor_id       = data.openstack_compute_flavor_v2.flavor.id
-  security_groups = ["default"]
+  security_groups = [ openstack_networking_secgroup_v2.secgroup.name ]
   key_pair        = "tf kubernetes keypair"
   user_data       = data.template_cloudinit_config.config.rendered
   metadata = {
